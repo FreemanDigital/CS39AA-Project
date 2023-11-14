@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+
+{% block title %}markAI{% endblock %}
+
+{% block stylesheets %}
+<style>
+    .progress-bar-red {
+        background-color: #dc3545; /* Bootstrap's danger red */
+    }
+    
+    .progress-bar-yellow {
+        background-color: #ffc107; /* Bootstrap's warning yellow */
+    }
+    
+    .progress-bar-green {
+        background-color: #28a745; /* Bootstrap's success green */
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4 p-3 bg-light shadow rounded-2">
+    markAI will automatically grade your essays and give you feedback on how to improve your writing. markAI is based on the GPT-4 language model from OpenAI. It is trained on a large corpus of essays and can grade your essay based on the quality of your writing. It can also give you feedback on how to improve your writing. To get started, enter your essay below and click submit.
+</div>
+<div class="container mt-2 mb-4 p-3 bg-light shadow rounded-2">
+    <h2>Enter your essay:</h2>
+    <form action="/mark" method="post" id="essay-form">
+        <textarea type="text" class="form-control" style="max-height: 500px; min-height: 200px; overflow-y: auto" name="user_question" placeholder="Enter text..." required>{% if prompt %}{{ prompt }}{% endif %}</textarea>
+        <button type="submit" class="btn btn-primary mt-2">Submit</button>
+    </form>
+    <div class="text-center" id="loading-spinner" style="display:none;">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        <p class="mt-2">Grading...</p>
+    </div>
+    {% if response %}
+        <div class="container mt-3 p-3 bg-white shadow rounded-2" id="openai-response">
+            <div class="progress" style="height: 20px;">
+                <div id="essay-score-progress" class="progress-bar" role="progressbar" style="width: {{ response['Numerical_Score'] }}%;" aria-valuenow="{{ response['Numerical_Score'] }}" aria-valuemin="0" aria-valuemax="100">{{ response['Numerical_Score'] }}</div>
+            </div>
+            <div class="response-content p-2" style="white-space: normal;">
+                <h3>Score: {{ response['Numerical_Score'] }} / 100</h3>
+                <div>
+                    <ul style="list-style-type: none;">
+                        {% for category, details in response['Categories'].items() %}
+                            <li>
+                                <strong>{{ category }}</strong>
+                                ({{ details['Score'] }} / {{ details['Max_Score'] }}):<br />
+                                {{ details['Comments'] }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <h3>Overall:</h3>
+                <p>{{ response['Overall_Feedback'] }}</p>
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+    document.getElementById('essay-form').onsubmit = function() {
+        // Show the spinner
+        document.getElementById('loading-spinner').style.display = 'block';
+    };
+    // Function to update progress bar class based on score
+    function updateProgressBar(score) {
+        var progressBar = document.getElementById('essay-score-progress');
+        progressBar.style.width = score + '%';
+        progressBar.setAttribute('aria-valuenow', score);
+        progressBar.textContent = score + '%';
+    
+        // Remove previous classes
+        progressBar.classList.remove('progress-bar-red', 'progress-bar-yellow', 'progress-bar-green');
+    
+        // Add new class based on score
+        if (score < 60) {
+        progressBar.classList.add('progress-bar-red');
+        } else if (score >= 60 && score < 80) {
+        progressBar.classList.add('progress-bar-yellow');
+        } else {
+        progressBar.classList.add('progress-bar-green');
+        }
+    }
+</script>
+{% if response %}
+<script>
+    updateProgressBar({{ response['Numerical_Score'] }});
+</script>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block title %}dreamAI{% endblock %}
+
+{% block stylesheets %}
+
+{% endblock %}
+
+{% block content %}
+    <div class="container mt-4 p-3 bg-light shadow rounded-2">
+        DreamAI is a dream intepreter based on major schools of thought in dream interpretation. Describe your dream and see what it means. Please be aware that dream interpretation is not an exact science and that the results are not guaranteed to be accurate. For in-depth dream interpretation, please consult a professional.
+    </div>
+    <div class="container mt-2 mb-4 p-3 bg-light shadow rounded-2">
+        <h2>Describe your dream:</h2>
+        <form action="/dream" method="post" id="dream-form">
+            <textarea type="text" class="form-control" style="max-height: 500px; min-height: 200px; overflow-y: auto" name="user_question" placeholder="Enter text..." required>{% if prompt %}{{ prompt }}{% endif %}</textarea>
+            <button type="submit" class="btn btn-primary mt-2">Submit</button>
+        </form>
+        <div class="text-center" id="loading-spinner" style="display:none;">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-2">Interpreting...</p>
+        </div>
+        {% if response %}
+            <div class="container d-flex flex-column mt-3 p-3 bg-white shadow rounded-2" id="openai-response">
+                <div class="mb-3">
+                    <p>
+                        <img src="{{ url_for('static', filename='freud.png') }}" alt="Freud" class="rounded-2" style="width: 200px; height: auto; float: left; margin-right: 10px;">
+                        <strong>Freud says:</strong><br />
+                        {{ response['Freudian_Interpretation'] }}
+                    </p>
+                </div>
+                <div class="mb-3">
+                    <p>
+                        <img src="{{ url_for('static', filename='jung.png') }}" alt="Jung" class="rounded-2" style="width: 200px; height: auto; float: left; margin-right: 10px;">
+                        <strong>Jung says:</strong><br />
+                        {{ response['Jungian_Interpretation'] }}
+                    </p>
+                </div>
+                <div>
+                    <p>
+                        <img src="{{ url_for('static', filename='psychologist.png') }}" alt="Psychologist" class="rounded-2" style="width: 200px; height: auto; float: left; margin-right: 10px;">
+                        <strong>Cognitive-behavioral science says:</strong><br />
+                        {{ response['Cognitive_Behavioral_Interpretation'] }}
+                    </p>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        document.getElementById("dream-form").addEventListener("submit", function() {
+            document.getElementById("loading-spinner").style.display = "block";
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+{% endblock %}

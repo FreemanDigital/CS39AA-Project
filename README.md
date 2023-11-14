@@ -1,7 +1,16 @@
 # CS39AA-Project:
+
+NOTE: The following application is a senior project for CS39AA - Natural Language Processing at Metropolitan State University of Denver.
+
+# Sample OpenAI Applications
+
+My project is a Flask web app that uses OpenAI's API to tackle different tasks and showcase some sample usages for the API. Currently, the app includes:
+- MarkAI Essay Grader
+- DreamAI Dream Interpreter
+
 # MarkAI Essay Grader
 
-MarkAI is a Flask web application that automatically grades essays using OpenAI's GPT-4 language model. It evaluates the quality of writing and provides detailed feedback on various aspects of the essay. MarkAI started as a project for a senior-level Natural Language Processing course at Metropolitan State University of Denver.
+MarkAI automatically grades essays using OpenAI's GPT-4 language model. It evaluates the quality of writing and provides detailed feedback on various aspects of the essay.
 
 ## Features
 
@@ -9,6 +18,21 @@ MarkAI is a Flask web application that automatically grades essays using OpenAI'
 - **Detailed Feedback**: Offers constructive comments on thesis, evidence, analysis, and writing conventions.
 - **GPT-4 Integration**: Utilizes OpenAI's advanced GPT-4 model for accurate grading.
 - **User-Friendly Interface**: Simple and clean web interface for easy essay submission.
+
+## Examples
+
+![Sample Input](static/sample_input_1.png)
+![Sample Output](static/sample_output_1.png)
+
+# DreamAI Dream Interpreter
+
+DreamAI interprets dreams using OpenAI's GPT-4 language model. It takes in a dream and outputs a dream interpretation based on 3 major schools of thought: Freudian, Jungian, and Cognitive.
+
+## Features
+
+- **Dream Interpretation**: Interprets dreams based on Freudian, Jungian, and Cognitive schools of thought.
+- **GPT-4 Integration**: Utilizes OpenAI's advanced GPT-4 model for accurate dream interpretation.
+- **User-Friendly Interface**: Simple and clean web interface for easy dream submission.
 
 ## Getting Started
 
